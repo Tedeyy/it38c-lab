@@ -1,14 +1,13 @@
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `user_type` enum('admin','user') NOT NULL DEFAULT 'user',
-  `last_login` datetime DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+<?php
+$host = 'localhost'; // or your database host
+$dbname = 'enterprise_system';
+$username = 'root';
+$password = '';
 
-CREATE TABLE `login_logs` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `login_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("ERROR: Could not connect. " . $e->getMessage());
+}
+?>

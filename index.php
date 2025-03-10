@@ -123,6 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
+    <script type="javascript" src="js/login.js"></script>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -145,12 +146,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="loginPassword" placeholder="Enter password">
                             <span class="invalid-feedback"><?php echo $password_err; ?></span>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <button type="submit" class="btn btn-primary w-100" id="loginBtn" onclick="disableLoginButton()">Login</button>
                         <p class="text-center mt-3">Don't have an account? <a href="register.php">Sign up</a></p>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+    function disableLoginButton() {
+        // Disable the button
+        document.getElementById("loginBtn").disabled = true;
+        
+        // Store the timestamp when the button was clicked
+        localStorage.setItem("loginDisabledTime", Date.now());
+
+        // Set timeout to re-enable the button after 2 minutes (120000 ms)
+        setTimeout(() => {
+            document.getElementById("loginBtn").disabled = false;
+            localStorage.removeItem("loginDisabledTime");
+        }, 120000);
+    }
+
+    // Check if the button should be disabled on page load
+    window.onload = function () {
+        const storedTime = localStorage.getItem("loginDisabledTime");
+        if (storedTime) {
+            const elapsedTime = Date.now() - parseInt(storedTime, 10);
+            if (elapsedTime < 120000) {
+                document.getElementById("loginBtn").disabled = true;
+                setTimeout(() => {
+                    document.getElementById("loginBtn").disabled = false;
+                    localStorage.removeItem("loginDisabledTime");
+                }, 120000 - elapsedTime);
+            }
+        }
+    };
+</script>
+
 </body>
 </html>
